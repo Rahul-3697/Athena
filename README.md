@@ -1,127 +1,252 @@
-# Project Athena
+# 🦉 Athena
 
-## Vision
+> **A modular AI engineering framework for building intelligent agents using reusable skills, workflows, and modern AI frameworks.**
 
-Project Athena is a modular AI Agent Framework built from first
-principles. The goal is not to replicate existing agent frameworks, but
-to understand and implement the core concepts that power intelligent
-autonomous systems.
+Athena is an open-source AI engineering framework designed to simplify the development of intelligent applications by combining a clean architecture with the latest AI ecosystem.
 
-Athena starts as a Research Agent and is designed to evolve into a
-general-purpose AI Agent Framework through incremental, well-defined
-architectural improvements.
+Rather than replacing frameworks like LangGraph or LangChain, Athena provides a consistent developer experience while allowing different AI technologies to be integrated underneath.
 
-------------------------------------------------------------------------
+---
 
-# Core Philosophy
+# 🚀 Vision
 
--   Build concepts before features.
--   Every module has a single responsibility.
--   Components remain stateless and "dumb".
--   The Manager owns execution.
--   Components communicate only through shared Context.
--   Keep the architecture simple, extensible, and explainable.
+The AI ecosystem evolves rapidly.
 
-------------------------------------------------------------------------
+New frameworks, tools, and models appear every few months.
 
-# Core Architecture
+Athena provides a stable architecture that allows developers to learn, experiment, and build production-ready AI agents without rewriting their applications whenever the ecosystem changes.
 
-    User
-       │
-       ▼
-    Agent
-       │
-       ▼
-    Manager (Execution Engine)
-       │
-       ▼
-    Pipeline (Workflow Definition)
-       │
-       ▼
-    Components
-       │
-       ▼
-    Context (Shared State)
+---
 
-------------------------------------------------------------------------
+# 🏗 Architecture
 
-# Responsibilities
+```
+                User
+                  │
+                  ▼
+               Agent
+                  │
+                  ▼
+              Workflow
+                  │
+        ┌─────────┴─────────┐
+        ▼                   ▼
+     Planner Skill      Search Skill
+        ▼                   ▼
+     Writer Skill      Report Skill
+                  │
+                  ▼
+               Context
+```
+
+Every Skill performs one responsibility.
+
+The Workflow orchestrates the Skills.
+
+The Agent orchestrates the Workflow.
+
+The Context becomes the shared knowledge between every Skill.
+
+---
+
+# 📂 Repository Structure
+
+```
+athena/
+│
+├── agent/             # Agent orchestration
+├── context/           # Shared execution context
+├── contracts/         # Common contracts & interfaces
+├── core/              # Runtime & execution engine
+├── prompts/           # Prompt templates
+├── skills/            # Reusable AI Skills
+├── tools/             # External tools & integrations
+├── workflow/          # Workflow orchestration
+│
+└── __init__.py
+```
+
+---
+
+# 🎯 Core Concepts
 
 ## Agent
 
--   Entry point for Athena.
--   Accepts user input.
--   Creates the initial context.
--   Delegates execution to the Manager.
--   Returns the final response.
+The public entry point of Athena.
 
-## Manager
+An Agent receives a user request, creates a Context, executes a Workflow, and returns the final result.
 
--   Execution engine.
--   Controls workflow execution.
--   Invokes components.
--   Updates context.
--   Handles routing, retries, validation, and termination.
+---
 
-## Pipeline
+## Workflow
 
--   Defines the workflow.
--   Contains ordered or dynamic execution steps.
--   Does not execute business logic.
+A Workflow is an ordered collection of Skills.
 
-## Component
+```python
+workflow = (
+    Workflow("Research")
+        .add(PlannerSkill())
+        .add(SearchSkill())
+        .add(ReportGeneratorSkill())
+)
+```
 
--   Executes exactly one task.
--   Reads from Context.
--   Writes results back to Context.
--   Never invokes another component directly.
+---
+
+## Skills
+
+Skills are reusable execution units.
+
+Each Skill performs one responsibility.
+
+Examples:
+
+- PlannerSkill
+- SearchSkill
+- ReportGeneratorSkill
+- SQLSkill
+- BrowserSkill
+- VisionSkill
+
+---
 
 ## Context
 
-Shared workspace containing: - Goal - Execution Plan - Research
-Results - Analysis - Final Report - Metadata - Execution Status
+Context represents the shared knowledge of the running workflow.
 
-------------------------------------------------------------------------
+Every Skill receives the same Context.
 
-# Design Rules
+```python
+context.set("goal", goal)
 
-1.  Components never communicate directly.
-2.  Manager is the only execution orchestrator.
-3.  Pipeline defines workflow; Manager executes it.
-4.  Context is the single source of truth.
-5.  Each class has one reason to change.
+plan = context.get("plan")
+```
 
-------------------------------------------------------------------------
+---
 
-# Current Roadmap
+# ⚡ Quick Example
 
-## v0.1
+```python
+from athena.agent.agent import Agent
+from athena.workflow.workflow import Workflow
 
--   Sequential research pipeline
--   Planning
--   Research
--   Report generation
+from athena.skills.planner_skill import PlannerSkill
+from athena.skills.report_generator_skill import ReportGeneratorSkill
 
-## v0.2
+workflow = (
+    Workflow("Research")
+        .add(PlannerSkill())
+        .add(ReportGeneratorSkill())
+)
 
--   Execution Manager
--   Pipeline Debugger
--   Dynamic routing
--   Better execution flow
+agent = Agent(
+    name="Research Agent",
+    workflow=workflow
+)
 
-## Future
+response = agent.invoke(
+    "Explain LangGraph."
+)
 
--   Tool Calling
--   Memory
--   Reflection
--   Planning Improvements
--   Multi-domain Pipelines
+print(response)
+```
 
-------------------------------------------------------------------------
+---
 
-# Long-Term Goal
+# 🌱 Current Status
 
-Athena should become a reusable framework capable of powering different
-AI agents (research, medical, finance, coding, customer support, etc.)
-without changing the execution engine---only the pipeline and
-components.
+Current Version: **v0.1**
+
+Implemented:
+
+- ✅ Modular Architecture
+- ✅ Agent
+- ✅ Workflow
+- ✅ Context
+- ✅ BaseSkill
+- ✅ Planner Skill
+- ✅ Report Generator Skill
+- ✅ Initial Runtime Structure
+
+In Progress:
+
+- 🔄 Search Skill
+- 🔄 LangChain Integration
+- 🔄 LangGraph Integration
+- 🔄 Runtime Manager
+- 🔄 Tool Registry
+
+Planned:
+
+- Memory
+- RAG
+- SQL Skills
+- Browser Skills
+- Vision Skills
+- Multi-Agent Workflows
+- Plugin System
+- Athena Studio (Visual Workflow Builder)
+
+---
+
+# 🛣 Roadmap
+
+## Phase 1
+
+- Core Architecture
+- Workflow Engine
+- Skills
+
+## Phase 2
+
+- LangChain Integration
+- LangGraph Integration
+- Tool Calling
+
+## Phase 3
+
+- Memory
+- RAG
+- Reflection
+- Decision Engine
+
+## Phase 4
+
+- Multi-Agent Workflows
+- Plugin Ecosystem
+
+## Phase 5
+
+- Athena Studio
+- Visual Workflow Builder
+
+---
+
+# 🎯 Design Principles
+
+- One Skill = One Responsibility
+- Workflows orchestrate Skills
+- Agents orchestrate Workflows
+- Context is the single source of truth
+- Build on top of existing AI frameworks instead of replacing them
+- Keep the public API simple and stable
+
+---
+
+# 🤝 Contributing
+
+Athena is an experimental framework focused on learning modern AI engineering while building practical and reusable software.
+
+Contributions, ideas, and discussions are always welcome.
+
+---
+
+# 📜 License
+
+MIT License
+
+---
+
+## ⭐ Philosophy
+
+> "Athena provides a stable developer experience while the AI ecosystem evolves underneath it."
