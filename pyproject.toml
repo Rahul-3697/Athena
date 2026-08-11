@@ -1,0 +1,12 @@
+[project]
+name = "athena"
+version = "0.1.0"
+description = "Athena AI Engineering Framework"
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["athena"]
