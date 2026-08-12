@@ -6,7 +6,7 @@ from athena.tools.mock_tool import MockTool
 from athena.tools.tool_executor import ToolExecutor
 from athena.runtime.tool_loop import ToolLoop
 from athena.tools.tool_registry import ToolRegistry
-
+from athena.runtime.execution_policy import ExecutionPolicy
 
 def main():
 
@@ -26,7 +26,10 @@ def main():
         llm=llm,
         registry=registry,
         executor=executor,
-        max_iterations=5,
+        policy=ExecutionPolicy(
+            max_iterations=3,
+            max_tool_calls=3,
+        )
     )
 
     result = loop.run(
