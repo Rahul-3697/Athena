@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from athena.contracts.tool_call import ToolCall
 from athena.contracts.tool_descriptor import ToolDescriptor
 from athena.contracts.tool_result import ToolResult
-
+from athena.contracts.llm_response import LLMResponse
 
 class BaseToolCallingLLM(ABC):
     """
@@ -16,7 +16,7 @@ class BaseToolCallingLLM(ABC):
         self,
         prompt: str,
         tools: list[ToolDescriptor],
-    ) -> tuple[str | None, list[ToolCall]]:
+    ) -> LLMResponse:
         """
         Start an LLM interaction.
 
@@ -29,7 +29,7 @@ class BaseToolCallingLLM(ABC):
     def continue_with_tool_results(
         self,
         results: list[tuple[ToolCall, ToolResult]],
-    ) -> tuple[str | None, list[ToolCall]]:
+    ) -> LLMResponse:
         """
         Continue the LLM interaction after Tool execution.
         """

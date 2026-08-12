@@ -20,5 +20,5 @@ class OpenAIToolFormatter(BaseToolFormatter):
             "name": descriptor.name,
             "description": descriptor.description,
             "parameters": descriptor.input_schema,
-            "strict": True,
+            # "strict": True,
         }

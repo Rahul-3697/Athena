@@ -2,7 +2,7 @@ from athena.contracts.tool_request import ToolRequest
 from athena.llms.tool_calling import BaseToolCallingLLM
 from athena.tools.tool_executor import ToolExecutor
 from athena.tools.tool_registry import ToolRegistry
-
+from athena.contracts.llm_response import LLMResponse
 
 class ToolLoop:
     """
@@ -25,19 +25,19 @@ class ToolLoop:
 
         descriptors = self.registry.descriptors()
 
-        answer, tool_calls = self.llm.generate(
+        response = self.llm.generate(
             prompt=prompt,
             tools=descriptors,
         )
 
         for _ in range(self.max_iterations):
 
-            if not tool_calls:
-                return answer or ""
+            if not response.tool_calls:
+                return response.content or ""
 
             results = []
 
-            for call in tool_calls:
+            for call in response.tool_calls:
 
                 request = ToolRequest(
                     tool_name=call.tool_name,
@@ -50,10 +50,8 @@ class ToolLoop:
                     (call, result)
                 )
 
-            answer, tool_calls = (
-                self.llm.continue_with_tool_results(
-                    results
-                )
+            response = self.llm.continue_with_tool_results(
+                results
             )
 
         raise RuntimeError(

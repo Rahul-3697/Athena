@@ -7,6 +7,7 @@ from openai import OpenAI
 from athena.contracts.tool_call import ToolCall
 from athena.contracts.tool_descriptor import ToolDescriptor
 from athena.contracts.tool_result import ToolResult
+from athena.contracts.llm_response import LLMResponse
 
 from athena.llms.tool_calling import BaseToolCallingLLM
 from athena.tools.formatters.openai_formatter import (
@@ -99,9 +100,7 @@ class OpenAIToolCallingLLM(BaseToolCallingLLM):
 
             if item.type == "function_call":
 
-                arguments = json.loads(
-                    item.arguments
-                )
+                arguments = json.loads(item.arguments)
 
                 tool_calls.append(
                     ToolCall(
@@ -112,9 +111,15 @@ class OpenAIToolCallingLLM(BaseToolCallingLLM):
                 )
 
         if tool_calls:
-            return None, tool_calls
+            return LLMResponse(
+                content=None,
+                tool_calls=tool_calls,
+            )
 
-        return response.output_text, []
+        return LLMResponse(
+            content=response.output_text,
+            tool_calls=[],
+        )
 
     @staticmethod
     def _serialize_result(
