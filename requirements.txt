@@ -22,3 +22,6 @@ openai>=1.100.0
 
 # Utilities
 typing-extensions>=4.12.0
+
+# Document Retrieval
+pypdf>=6.0.0
