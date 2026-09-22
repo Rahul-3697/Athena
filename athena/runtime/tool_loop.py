@@ -35,6 +35,8 @@ class ToolLoop:
         self.last_state: ExecutionState | None = None
 
     def run(self, prompt: str) -> str:
+        """Run the tool loop."""
+
         from concurrent.futures import (
             ThreadPoolExecutor,
             TimeoutError,
@@ -108,3 +110,5 @@ class ToolLoop:
         raise RuntimeError(
             "Tool loop exceeded maximum iterations."
         )
+    
+

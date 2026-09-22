@@ -13,6 +13,7 @@ from athena.tools.tool_executor import ToolExecutor
 
 
 class ToolRunner:
+    """A class to run tools with retry and timeout policies."""
 
     def __init__(
         self,

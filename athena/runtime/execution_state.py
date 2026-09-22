@@ -7,6 +7,10 @@ from athena.runtime.execution_status import ExecutionStatus
 
 @dataclass
 class ExecutionState:
+    """
+    Represents the state of the execution.
+
+    """
     goal: str
 
     iteration: int = 0
