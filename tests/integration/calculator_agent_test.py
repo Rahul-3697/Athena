@@ -8,6 +8,7 @@ from athena.tools.tool_registry import ToolRegistry
 from athena.llms.openai_tool_calling import OpenAIToolCallingLLM
 from athena.runtime.execution_policy import ExecutionPolicy
 from athena.runtime.tool_loop import ToolLoop
+from athena.runtime.runtime import Runtime
 
 
 registry = ToolRegistry()
@@ -19,6 +20,13 @@ registry.register(
 executor = ToolExecutor(
     registry=registry
 )
+
+  # 3. Create Runtime
+runtime = Runtime(
+        registry=registry,
+        executor=executor,
+    )
+
 
 runner = ToolRunner(
     executor=executor
