@@ -14,6 +14,8 @@ class Context:
 
     report: Report | None = None
 
+    output: Any = None
+
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def set(self, key: str, value):

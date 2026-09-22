@@ -39,6 +39,6 @@ class BaseCapability(ABC):
 #     @property
 #     def workflows(self) -> dict[str, Workflow]:
 #         return {
-#             "contract_review": ContractReviewWorkflow(),
-#             "clause_analysis": ClauseAnalysisWorkflow(),
+#             "contract_review": "ABC",
+#             "clause_analysis": "DDD",
 #         }

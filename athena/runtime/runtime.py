@@ -21,6 +21,11 @@ from athena.capabilities.capability_resolver import CapabilityResolver
 
 from athena.context.context import Context
 
+from athena.context.context import Context
+from athena.contracts.execution_state_records.execution_result import (
+    ExecutionResult,
+)
+
 
 class Runtime:
 
@@ -261,6 +266,11 @@ class Runtime:
                 )
 
                 print(
+                    f"    Output   : {result.output}"
+                )
+
+
+                print(
                     f"    Context  : {result.metadata}"
                 )
 
@@ -287,7 +297,7 @@ class Runtime:
                     )
                 )
 
-                results.append(result)
+                results.append(result.output)
 
                 continue
 
@@ -477,3 +487,40 @@ class Runtime:
         print("=" * 60)
 
         return execution_result, record
+
+    def _normalize_result(
+            self,
+            result,
+            execution_id: str,
+            step,
+        ) -> ExecutionResult:
+
+            # Capability / Workflow result
+            if isinstance(result, Context):
+
+                return ExecutionResult(
+                    execution_id=execution_id,
+                    status="completed",
+                    output=result.output,
+                    metadata={
+                        "target": step.target,
+                        "execution_type": "capability",
+                        **result.metadata,
+                    },
+                )
+
+            # Tool result
+            return ExecutionResult(
+                execution_id=execution_id,
+                status=(
+                    "completed"
+                    if result.success
+                    else "failed"
+                ),
+                output=result.data,
+                metadata={
+                    "target": step.target,
+                    "execution_type": "tool",
+                },
+                error=result.error,
+            )
